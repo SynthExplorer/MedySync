@@ -12,54 +12,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        >
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Esta vista es 'activity_actividad1' "
-            android:textColor="@color/white"
-            android:textStyle="bold"
+            android:text="Medicamentos Registrados"
             android:textSize="24sp"
-            android:paddingBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Holaaaaaa"
-            android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="24sp"
-            android:paddingBottom="16dp"/>
+            android:paddingBottom="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bienvenido a MedySync"
-            android:textSize="24sp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:paddingBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="📌 Aquí podrás gestionar tus medicamentos."
-            android:textSize="18sp"
-            android:paddingBottom="8dp"/>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMedicamentos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
-
     <FrameLayout
-    android:id="@+id/fragmentContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-
-
-
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

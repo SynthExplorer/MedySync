@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+import android.util.Log
+
+
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -79,11 +82,15 @@ class RegisterActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 Toast.makeText(this, "Registro exitoso 🎉", Toast.LENGTH_SHORT).show()
 
-                                
+                                Log.d("RegisterActivity", "Datos guardados correctamente. Redirigiendo...")
+
+
+
                                 val intent = Intent(this, MainActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                                 startActivity(intent)
+
 
                             }
                             .addOnFailureListener { e ->

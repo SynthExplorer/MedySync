@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.firebase.common.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,5 +69,10 @@ dependencies {
     implementation ("com.google.android.material:material:1.12.0")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
+
+
 
 }
