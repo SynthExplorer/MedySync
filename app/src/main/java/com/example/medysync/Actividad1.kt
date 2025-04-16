@@ -22,6 +22,7 @@ class Actividad1 : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_actividad1)
 
+        // Fragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, FabFragment())
             .commit()
@@ -37,6 +38,8 @@ class Actividad1 : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         obtenerMedicamentosDelUsuario()
+
+
     }
 
     private fun obtenerMedicamentosDelUsuario() {
