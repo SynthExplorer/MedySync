@@ -13,33 +13,32 @@ class Actividad1 : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MedicamentoAdapter
-    private var listaMedicamentos = mutableListOf<Medicamento>()
+    private val listaMedicamentos = mutableListOf<Medicamento>()
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_actividad1)
 
-        // Fragment
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, FabFragment())
             .commit()
 
-        // Inicializar Firestore y Auth
-        db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
-        // Configurar RecyclerView
         recyclerView = findViewById(R.id.recyclerViewMedicamentos)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MedicamentoAdapter(listaMedicamentos)
         recyclerView.adapter = adapter
 
         obtenerMedicamentosDelUsuario()
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        obtenerMedicamentosDelUsuario()
     }
 
     private fun obtenerMedicamentosDelUsuario() {
@@ -51,7 +50,7 @@ class Actividad1 : AppCompatActivity() {
                 .collection("medicamentos")
                 .get()
                 .addOnSuccessListener { result ->
-                    listaMedicamentos.clear() // Limpiar la lista antes de agregar nuevos
+                    listaMedicamentos.clear()
                     for (document in result) {
                         val medicamento = document.toObject(Medicamento::class.java)
                         listaMedicamentos.add(medicamento)

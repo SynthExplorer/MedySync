@@ -1,6 +1,6 @@
 package com.example.medysync
 
-data class Medicamento (
+data class Medicamento(
     val id: String = "",
     val nombre: String = "",
     val dosis: String = "",

@@ -1,6 +1,7 @@
 package com.example.medysync
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -15,7 +16,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
 
     private lateinit var tvTiempoRestante: TextView
     private var fechaFin: Long = 0L
-    private val handler = Handler(Looper.getMainLooper())
+    private var countDownTimer: CountDownTimer? = null
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -30,25 +31,43 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Obtener los datos del Intent
         nombre = intent.getStringExtra("nombre") ?: "No disponible"
         dosis = intent.getStringExtra("dosis") ?: "No disponible"
         fechaFin = intent.getLongExtra("fechaFin", 0L)
 
-        // Log para verificar que los datos llegaron correctamente
-        Log.d("MedicamentoDetalleActivity", "Datos recibidos: nombre=$nombre, dosis=$dosis, fechaFin=$fechaFin")
-
-        // Actualizar la UI con los datos
         findViewById<TextView>(R.id.tvNombreMedicamento).text = nombre
         findViewById<TextView>(R.id.tvDosis).text = "Dosis: $dosis"
         tvTiempoRestante = findViewById(R.id.tvTiempoRestante)
 
-        actualizarTiempo()
-        handler.post(tiempoRunnable)
+        iniciarCuentaRegresiva()
 
-        // Eliminar medicamento
         findViewById<Button>(R.id.btnEliminar).setOnClickListener {
             eliminarMedicamento()
+        }
+    }
+
+    private fun iniciarCuentaRegresiva() {
+        val tiempoRestante = fechaFin - System.currentTimeMillis()
+        if (tiempoRestante > 0) {
+            countDownTimer = object : CountDownTimer(tiempoRestante, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val segundos = (millisUntilFinished / 1000) % 60
+                    val minutos = (millisUntilFinished / (1000 * 60)) % 60
+                    val horas = (millisUntilFinished / (1000 * 60 * 60)) % 24
+                    val dias = (millisUntilFinished / (1000 * 60 * 60 * 24))
+                    val meses = dias / 30
+                    val diasRestantes = dias % 30
+
+                    tvTiempoRestante.text =
+                        "${meses}m ${diasRestantes}d ${horas}h ${minutos}m ${segundos}s restantes"
+                }
+
+                override fun onFinish() {
+                    tvTiempoRestante.text = "🛑 Tratamiento finalizado"
+                }
+            }.start()
+        } else {
+            tvTiempoRestante.text = "🛑 Tratamiento finalizado"
         }
     }
 
@@ -70,7 +89,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                             .delete()
                     }
                     Toast.makeText(this, "✅ Medicamento eliminado", Toast.LENGTH_SHORT).show()
-                    finish() // Regresar a la lista
+                    finish()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "❌ Error al eliminar", Toast.LENGTH_SHORT).show()
@@ -78,30 +97,8 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
         }
     }
 
-    private val tiempoRunnable = object : Runnable {
-        override fun run() {
-            actualizarTiempo()
-            handler.postDelayed(this, 1000)
-        }
-    }
-
-    private fun actualizarTiempo() {
-        val tiempoRestante = fechaFin - System.currentTimeMillis()
-        val segundos = (tiempoRestante / 1000) % 60
-        val minutos = (tiempoRestante / (1000 * 60)) % 60
-        val horas = (tiempoRestante / (1000 * 60 * 60)) % 24
-        val dias = (tiempoRestante / (1000 * 60 * 60 * 24))
-        val meses = dias / 30
-
-        tvTiempoRestante.text = if (tiempoRestante > 0) {
-            "${meses}m ${dias % 30}d ${horas}h ${minutos}m ${segundos}s restantes"
-        } else {
-            "🛑 Tratamiento finalizado"
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(tiempoRunnable)
+        countDownTimer?.cancel()
     }
 }

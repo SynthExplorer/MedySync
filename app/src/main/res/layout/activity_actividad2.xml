@@ -40,6 +40,15 @@
                 android:inputType="text"
                 android:layout_marginTop="12dp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Duración de Tratamiento"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"/>
+
             <!-- Frecuencia -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -143,17 +152,8 @@
                 android:layout_marginTop="32dp" />
 
 
-
         </LinearLayout>
-
-
-
     </ScrollView>
-    <!-- Fragment container
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="32dp" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.medysync
 
 import android.content.Intent
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -13,16 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
     RecyclerView.Adapter<MedicamentoAdapter.MedicamentoViewHolder>() {
 
-    private val handler = Handler(Looper.getMainLooper())
-
     class MedicamentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.tvNombre)
         val dosis: TextView = itemView.findViewById(R.id.tvDosis)
         val tvTiempoRestante: TextView = itemView.findViewById(R.id.tvTiempoRestante)
+        var countDownTimer: CountDownTimer? = null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicamentoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_medicamento, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_medicamento, parent, false)
         return MedicamentoViewHolder(view)
     }
 
@@ -31,48 +32,47 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
         holder.nombre.text = medicamento.nombre
         holder.dosis.text = medicamento.dosis
 
-        val runnable = object : Runnable {
-            override fun run() {
-                actualizarTiempoRestante(medicamento, holder)
-                handler.postDelayed(this, 1000)
+        // Cancelar cualquier temporizador anterior
+        holder.countDownTimer?.cancel()
+
+        val tiempoRestante = medicamento.fechaFin - System.currentTimeMillis()
+
+        if (tiempoRestante > 0) {
+            // Verificar si ya existe un temporizador antes de crear uno nuevo
+            holder.countDownTimer = object : CountDownTimer(tiempoRestante, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val segundos = millisUntilFinished / 1000 % 60
+                    val minutos = millisUntilFinished / (1000 * 60) % 60
+                    val horas = millisUntilFinished / (1000 * 60 * 60) % 24
+                    val dias = millisUntilFinished / (1000 * 60 * 60 * 24)
+                    holder.tvTiempoRestante.text = "$dias d $horas h $minutos m $segundos s"
+                }
+
+                override fun onFinish() {
+                    holder.tvTiempoRestante.text = "Tratamiento finalizado"
+                }
             }
+            holder.countDownTimer?.start()
+        } else {
+            holder.tvTiempoRestante.text = "Tratamiento finalizado"
         }
-        handler.post(runnable)
 
         holder.itemView.setOnClickListener {
-            try {
-                // Log para verificar que los datos se pasan correctamente
-                Log.d("MedicamentoAdapter", "Navegando a MedicamentoDetalleActivity con id: ${medicamento.id}, nombre: ${medicamento.nombre}, dosis: ${medicamento.dosis}")
-
-                val context = holder.itemView.context
-                val intent = Intent(context, MedicamentoDetalleActivity::class.java).apply {
-                    putExtra("id", medicamento.id)
-                    putExtra("nombre", medicamento.nombre)
-                    putExtra("dosis", medicamento.dosis)
-                    putExtra("fechaFin", medicamento.fechaFin)
-                }
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                Log.e("MedicamentoAdapter", "Error al abrir detalle", e)
+            val context = holder.itemView.context
+            val intent = Intent(context, MedicamentoDetalleActivity::class.java).apply {
+                putExtra("id", medicamento.id)
+                putExtra("nombre", medicamento.nombre)
+                putExtra("dosis", medicamento.dosis)
+                putExtra("fechaFin", medicamento.fechaFin)
             }
+            context.startActivity(intent)
         }
     }
 
-    private fun actualizarTiempoRestante(medicamento: Medicamento, holder: MedicamentoViewHolder) {
-        val tiempoRestante = medicamento.fechaFin - System.currentTimeMillis()
-        val segundos = (tiempoRestante / 1000) % 60
-        val minutos = (tiempoRestante / (1000 * 60)) % 60
-        val horas = (tiempoRestante / (1000 * 60 * 60)) % 24
-        val dias = (tiempoRestante / (1000 * 60 * 60 * 24))
-        val meses = dias / 30
-
-        val textoTiempoRestante = if (tiempoRestante > 0) {
-            "${meses}m ${dias % 30}d ${horas}h ${minutos}m ${segundos}s restantes"
-        } else {
-            "🛑 Tratamiento finalizado"
-        }
-
-        holder.tvTiempoRestante.text = textoTiempoRestante
+    override fun onViewRecycled(holder: MedicamentoViewHolder) {
+        super.onViewRecycled(holder)
+        //
+        holder.countDownTimer?.cancel()
     }
 
     override fun getItemCount(): Int = listaMedicamentos.size
