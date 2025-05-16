@@ -1,9 +1,12 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".Actividad2">
 
     <ScrollView
@@ -30,7 +33,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nombre del medicamento"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColorHint="#BBBBBB"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FFFFFF"/>
 
             <EditText
                 android:id="@+id/etDosis"
@@ -38,25 +44,30 @@
                 android:layout_height="wrap_content"
                 android:hint="Dosis"
                 android:inputType="text"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="12dp"
+                android:textColorHint="#BBBBBB"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FFFFFF"/>
 
+            <!-- Duración del tratamiento -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Duración de Tratamiento"
+                android:text="Duración del Tratamiento"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:textColor="#FFFFFF"
                 android:gravity="center"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp" />
 
-            <!-- Frecuencia -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="32dp"
-                android:weightSum="4">
+                android:weightSum="4"
+                android:layout_marginBottom="16dp">
 
                 <!-- Horas -->
                 <LinearLayout
@@ -69,6 +80,7 @@
                     <TextView
                         android:text="Horas"
                         android:textStyle="bold"
+                        android:textColor="#FFFFFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp" />
@@ -90,6 +102,7 @@
                     <TextView
                         android:text="Días"
                         android:textStyle="bold"
+                        android:textColor="#FFFFFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp" />
@@ -111,6 +124,7 @@
                     <TextView
                         android:text="Semanas"
                         android:textStyle="bold"
+                        android:textColor="#FFFFFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp" />
@@ -132,6 +146,7 @@
                     <TextView
                         android:text="Meses"
                         android:textStyle="bold"
+                        android:textColor="#FFFFFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp" />
@@ -143,17 +158,46 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Frecuencia del medicamento -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Frecuencia (en horas)"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sliderFrecuencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:valueFrom="1"
+                android:valueTo="24"
+                android:stepSize="1"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvFrecuenciaSeleccionada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cada 1 hora"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_gravity="center_horizontal" />
+
             <!-- Botón Guardar -->
             <Button
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Guardar Medicamento"
-                android:layout_marginTop="32dp" />
-
-
+                android:layout_marginTop="32dp"
+                android:backgroundTint="#6200EE"
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

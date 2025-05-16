@@ -64,6 +64,8 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
                 putExtra("nombre", medicamento.nombre)
                 putExtra("dosis", medicamento.dosis)
                 putExtra("fechaFin", medicamento.fechaFin)
+                putExtra("frecuenciaHoras", medicamento.frecuenciaHoras)
+
             }
             context.startActivity(intent)
         }

@@ -1,5 +1,7 @@
 package com.example.medysync
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -11,6 +13,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import android.util.Log
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -18,9 +25,39 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
+
+        val blob1 = findViewById<ImageView>(R.id.blob_1)
+        val blob2 = findViewById<ImageView>(R.id.blob_2)
+
+        val moveX = ObjectAnimator.ofFloat(blob1, "translationX", 300f)
+        val moveY = ObjectAnimator.ofFloat(blob1, "translationY", -700f)
+        val rotate = ObjectAnimator.ofFloat(blob1, "rotation", 0f, 110f)
+        val fadeIn = ObjectAnimator.ofFloat(blob1, "alpha", 0f, 0.5f)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(moveX, moveY, rotate, fadeIn)
+        animatorSet.duration = 2000
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.start()
+
+        val moveX2 = ObjectAnimator.ofFloat(blob2, "translationX", -550f) // hacia la izquierda
+        val moveY2 = ObjectAnimator.ofFloat(blob2, "translationY", 1900f)  // sigue abajo pero visible
+        val rotate2 = ObjectAnimator.ofFloat(blob2, "rotation", 0f, -90f)
+        val fadeIn2 = ObjectAnimator.ofFloat(blob2, "alpha", 0f, 0.5f)
+
+        val animatorSet2 = AnimatorSet()
+        animatorSet2.playTogether(moveX2, moveY2, rotate2, fadeIn2)
+        animatorSet2.duration = 2000
+        animatorSet2.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet2.start()
+
+        val rootLayout = findViewById<ConstraintLayout>(R.id.main)
+        val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.fadein)
+        rootLayout.startAnimation(animation)
 
         auth = FirebaseAuth.getInstance()
 
@@ -59,7 +96,8 @@ class RegisterActivity : AppCompatActivity() {
 
         btnGoLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            //finish()
         }
     }
 

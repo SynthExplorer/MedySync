@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 import android.widget.Toast
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -23,12 +24,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        FirebaseApp.initializeApp(this)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, FabFragment())
             .commit()
 
-        val tvSaludo = findViewById<TextView>(R.id.tvSaludo)
+        val tvNombre = findViewById<TextView>(R.id.tvNombre)
+        val tvApellido = findViewById<TextView>(R.id.tvApellido)
+        val tvCedula = findViewById<TextView>(R.id.tvCedula)
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val currentUser = auth.currentUser
@@ -38,11 +43,15 @@ class MainActivity : AppCompatActivity() {
             db.collection("usuarios").document(userId).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
-                        val nombre = document.getString("nombre")
-                        val apellido = document.getString("apellido")
-                        val cedula = document.getString("id")
+                        val nombre = document.getString("nombre") ?: "Usuario"
+                        val apellido = document.getString("apellido") ?: ""
+                        val cedula = document.getString("id") ?: ""
+                        tvNombre.text = nombre
+                        tvApellido.text = apellido
+                        tvCedula.text = cedula
 
-                        tvSaludo.text = "Bienvenido, $nombre $apellido con cédula $cedula"
+
+                        //tvSaludo.text = "Bienvenido, $nombre $apellido con cédula $cedula"
                     } else {
                         Toast.makeText(this, "Error al obtener los datos del usuario", Toast.LENGTH_SHORT).show()
                     }

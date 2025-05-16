@@ -6,32 +6,62 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#000"
     tools:context=".SeetingsActivity">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cerrar Sesión"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/design_default_color_primary"
-        android:icon="@drawable/ic_logout"
-        app:iconPadding="12dp"
-        app:iconGravity="textStart"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp"
-        app:cornerRadius="20dp"
-        style="@style/Widget.MaterialComponents.Button"
-
-
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📋 Ver Historial de Tomas"
+            android:textColor="@color/white"
+            app:cornerRadius="16dp"
+            app:iconPadding="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubirArchivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📁 Subir Archivo"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#03A9F4"
+            app:cornerRadius="16dp"
+            app:iconPadding="12dp"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🚪 Cerrar Sesión"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/design_default_color_primary"
+            app:cornerRadius="16dp"
+            app:iconPadding="12dp"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

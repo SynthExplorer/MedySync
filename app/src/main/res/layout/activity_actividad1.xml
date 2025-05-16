@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000"
     tools:context=".Actividad1">
+    <!-- Prueba Guardadoooo--><!-- Prueba Guardadoooo--><!-- Prueba Guardadoooo-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +30,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"/>
-
     </LinearLayout>
 
     <FrameLayout

@@ -5,8 +5,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +23,37 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+        Toast.makeText(this, "Login iniciado", Toast.LENGTH_SHORT).show()
+
+        Log.d("LoginActivity", "LoginActivity iniciada")
+
+
+        val blob_1 = findViewById<ImageView>(R.id.blob_1)
+        val blob_2 = findViewById<ImageView>(R.id.blob_2)
+
+        blob_1.translationX = -900f  // empieza más a la izquierda
+        blob_1.translationY = -900f  // empieza más arriba
+        blob_1.alpha = 0f            // comienza invisible
+
+        blob_1.animate()
+            .translationX(-500f)
+            .translationY(-500f)
+            .alpha(0.5f)
+            .setDuration(3000)
+            .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+            .start()
+
+        blob_2.translationX = 900f  // empieza más a la izquierda
+        blob_2.translationY = 900f  // empieza más arriba
+        blob_2.alpha = 0f            // comienza invisible
+
+        blob_2.animate()
+            .translationX(0f)
+            .translationY(0f)
+            .alpha(0.5f)
+            .setDuration(3000)
+            .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+            .start()
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -41,10 +74,11 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        btnRegister.setOnClickListener{
+        btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
-            finish()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }
 
     }

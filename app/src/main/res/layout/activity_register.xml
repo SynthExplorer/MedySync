@@ -6,157 +6,166 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
     tools:context=".RegisterActivity">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/blob_1"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="top|end"
+        android:translationX="-500dp"
+        android:translationY="-500dp"
+        android:alpha="0"
+        android:scaleType="centerCrop"
+        android:src="@drawable/blob_1" />
+
+    <ImageView
+        android:id="@+id/blob_2"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:translationX="500dp"
+        android:translationY="500dp"
+        android:alpha="0"
+        android:scaleType="centerCrop"
+        android:src="@drawable/blob_2" />
+
+
+
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="30dp"
-        android:gravity="center"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cuida de ti con un solo clic"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:paddingBottom="16dp"/>
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center">
 
-        <!-- Campo nombre -->
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRegisterNombre"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
+                android:text="Cuida de ti con un solo clic"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:paddingBottom="24dp"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Campo Apellido -->
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apellido"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRegisterApellido"
+            <!-- Nombre -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Nombre"
+                app:startIconDrawable="@drawable/ic_person">
 
-        <!-- Campo ID -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cédula"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRegisterId"
+            <!-- Apellido -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Apellido"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/ic_person">
 
-        <!-- Campo Email -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterApellido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRegisterEmail"
+            <!-- Cédula -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
+                android:hint="Cédula"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/ic_id">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Campo Contraseña -->
-
-        <com.google.android.material.textfield.TextInputLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRegisterPassword"
+            <!-- Email -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:hint="Email"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/ic_email">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Botón Confirmar Pass -->
-
-        <com.google.android.material.textfield.TextInputLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Confirmar Contraseña"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etConfirmPassword"
+            <!-- Contraseña -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Contraseña"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/ic_lock">
 
-        <!-- Botón Registrarse -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegisterUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrarse"
-            android:layout_marginTop="16dp"
+            <!-- Confirmar Contraseña -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirmar Contraseña"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/ic_lock">
 
-            app:cornerRadius="50dp"
-            style="@style/Widget.MaterialComponents.Button"
-            />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Boton volver al Login -->
+            <!-- Botón Registrarse -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegisterUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrarse"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_marginTop="24dp"
+                app:cornerRadius="16dp"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGoLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Volver al Login"
-            android:layout_marginTop="10dp"
-
-            app:cornerRadius="10dp"
-            style="@style/Widget.MaterialComponents.Button"/>
-
-
-    </LinearLayout>
+            <!-- Volver al Login -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Volver al Login"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_marginTop="12dp"
+                app:cornerRadius="12dp"/>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

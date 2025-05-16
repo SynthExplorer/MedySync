@@ -27,6 +27,23 @@ class SeetingsActivity : AppCompatActivity() {
 
         userPreferences = UserPreferences(this)
 
+        val btnHistorial = findViewById<MaterialButton>(R.id.btnHistorial)
+
+        btnHistorial.setOnClickListener {
+            val intent = Intent(this, HistorialTomasActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnSubirArchivo = findViewById<MaterialButton>(R.id.btnSubirArchivo)
+        btnSubirArchivo.setOnClickListener {
+            val intent = Intent(this, SubirArchivoActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
         val btnCerrarSesion = findViewById<MaterialButton>(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener {

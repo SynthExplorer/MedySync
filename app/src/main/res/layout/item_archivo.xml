@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:baselineAligned="false">
+
+    <!-- Imagen o ícono -->
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_file" />
+
+    <!-- Nombre del archivo -->
+    <TextView
+        android:id="@+id/tvNombreArchivo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Nombre del archivo"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Botones -->
+    <ImageButton
+        android:id="@+id/btnDescargar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_download"
+        android:tint="@color/white"
+        android:layout_marginStart="4dp" />
+
+    <ImageButton
+        android:id="@+id/btnEliminar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/white"
+        android:layout_marginStart="4dp" />
+</LinearLayout>
