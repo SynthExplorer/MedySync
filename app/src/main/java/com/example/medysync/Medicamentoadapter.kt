@@ -39,6 +39,7 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
 
         if (tiempoRestante > 0) {
             // Verificar si ya existe un temporizador antes de crear uno nuevo
+
             holder.countDownTimer = object : CountDownTimer(tiempoRestante, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val segundos = millisUntilFinished / 1000 % 60
