@@ -26,11 +26,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
-
 class Actividad2 : AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
-    private var frecuenciaHoras = 1 // valor inicial del slider
+    private var frecuenciaHoras = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,19 +39,22 @@ class Actividad2 : AppCompatActivity() {
         crearCanalNotificacion()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                1
+            )
         }
 
         val sliderFrecuencia = findViewById<Slider>(R.id.sliderFrecuencia)
         val tvFrecuencia = findViewById<TextView>(R.id.tvFrecuenciaSeleccionada)
 
-        // 🟢 Escuchar cambios en el slider
         sliderFrecuencia.addOnChangeListener { _, value, _ ->
             frecuenciaHoras = value.toInt()
             tvFrecuencia.text = "Cada $frecuenciaHoras hora${if (frecuenciaHoras > 1) "s" else ""}"
         }
 
-        val etNombreMedicamento = findViewById<EditText>(R.id.etNombreMedicamento)
+        val etNombre = findViewById<EditText>(R.id.etNombreMedicamento)
         val etDosis = findViewById<EditText>(R.id.etDosis)
         val npHoras = findViewById<NumberPicker>(R.id.npHoras)
         val npDias = findViewById<NumberPicker>(R.id.npDias)
@@ -60,21 +62,14 @@ class Actividad2 : AppCompatActivity() {
         val npMeses = findViewById<NumberPicker>(R.id.npMeses)
         val btnGuardar = findViewById<Button>(R.id.btnGuardar)
 
-        // Configuración NumberPickers
-        npHoras.minValue = 0
-        npHoras.maxValue = 23
-
-        npDias.minValue = 0
-        npDias.maxValue = 30
-
-        npSemanas.minValue = 0
-        npSemanas.maxValue = 4
-
-        npMeses.minValue = 0
-        npMeses.maxValue = 12
+        // Configurar rangos de NumberPickers
+        npHoras.minValue = 0; npHoras.maxValue = 23
+        npDias.minValue = 0; npDias.maxValue = 30
+        npSemanas.minValue = 0; npSemanas.maxValue = 4
+        npMeses.minValue = 0; npMeses.maxValue = 12
 
         btnGuardar.setOnClickListener {
-            val nombre = etNombreMedicamento.text.toString().trim()
+            val nombre = etNombre.text.toString().trim()
             val dosis = etDosis.text.toString().trim()
 
             if (nombre.isEmpty() || dosis.isEmpty()) {
@@ -82,21 +77,18 @@ class Actividad2 : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val dias = npDias.value
-            val semanas = npSemanas.value
-            val meses = npMeses.value
+            val duracionMilis =
+                npHoras.value * 60 * 60 * 1000L +
+                        npDias.value * 24 * 60 * 60 * 1000L +
+                        npSemanas.value * 7 * 24 * 60 * 60 * 1000L +
+                        npMeses.value * 30L * 24 * 60 * 60 * 1000L
 
-            val duracionEnMilis =
-                (dias * 24 * 60 * 60 * 1000L) +
-                        (semanas * 7 * 24 * 60 * 60 * 1000L) +
-                        (meses * 30L * 24 * 60 * 60 * 1000L)
-
-            if (duracionEnMilis <= 0) {
+            if (duracionMilis <= 0) {
                 Toast.makeText(this, "⚠️ Selecciona una duración válida ⚠️", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val fechaFin = System.currentTimeMillis() + duracionEnMilis
+            val fechaFin = System.currentTimeMillis() + duracionMilis
             val idUnico = UUID.randomUUID().toString()
             val frecuenciaTexto = "Cada ${frecuenciaHoras}h"
             val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
@@ -121,6 +113,9 @@ class Actividad2 : AppCompatActivity() {
                     .addOnSuccessListener {
                         programarNotificacion(medicamento, frecuenciaMillis)
                         Toast.makeText(this, "✅ Medicamento guardado", Toast.LENGTH_SHORT).show()
+
+                        val intent = Intent(this, Actividad1::class.java)
+                        startActivity(intent)
                         finish()
                     }
                     .addOnFailureListener {
@@ -162,11 +157,32 @@ class Actividad2 : AppCompatActivity() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val triggerAtMillis = System.currentTimeMillis() + frecuenciaMillis
 
+        // Notificación repetitiva
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             triggerAtMillis,
             frecuenciaMillis,
             pendingIntent
         )
+
+        // Alarma para detener notificación al llegar a la fechaFin
+        val detenerIntent = Intent(this, DetenerNotificacionReceiver::class.java).apply {
+            putExtra("idUnico", medicamento.id)
+        }
+
+        val detenerPendingIntent = PendingIntent.getBroadcast(
+            this,
+            ("cancel_${medicamento.id}").hashCode(),
+            detenerIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            medicamento.fechaFin,
+            detenerPendingIntent
+        )
     }
+
+
 }

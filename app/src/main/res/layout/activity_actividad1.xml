@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
+    android:background="#000000"
     tools:context=".Actividad1">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medicamentos Registrados"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:paddingBottom="16dp" />
+            android:textColor="#FFFFFF"
+            android:paddingBottom="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:shadowColor="#CCFFFFFF"
+            android:shadowDx="2"
+            android:shadowDy="15"
+            android:shadowRadius="40"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMedicamentos"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"/>
+        android:id="@+id/recyclerViewMedicamentos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    android:id="@+id/fragmentContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

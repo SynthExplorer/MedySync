@@ -31,6 +31,8 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
     private var dosis: String = ""
     private var frecuenciaHoras: Int = 1
 
+    private var ultimaToma: Long? = null  // Nuevo campo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_medicamento_detalle)
@@ -43,29 +45,23 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
         fechaFin = intent.getLongExtra("fechaFin", 0L)
         frecuenciaHoras = intent.getIntExtra("frecuenciaHoras", 1)
 
-        val fechaCreacion = intent.getLongExtra("fechaCreacion", 0L)
-
-
-        findViewById<TextView>(R.id.tvNombreMedicamento).text = nombre
-        findViewById<TextView>(R.id.tvDosis).text = "Dosis: $dosis"
         tvTiempoRestante = findViewById(R.id.tvTiempoRestante)
         tvProximaDosis = findViewById(R.id.tvProximaDosis)
 
-        iniciarCuentaRegresiva()
-        mostrarTiempoProximaDosis(fechaCreacion)
+        findViewById<TextView>(R.id.tvNombreMedicamento).text = nombre
+        findViewById<TextView>(R.id.tvDosis).text = dosis
 
-        val btnMarcarComoTomado = findViewById<Button>(R.id.btnMarcarComoTomado)
-        btnMarcarComoTomado.setOnClickListener {
+        iniciarCuentaRegresiva()
+        obtenerUltimaTomaYMostrarProximaDosis()
+
+        findViewById<Button>(R.id.btnMarcarComoTomado).setOnClickListener {
             reiniciarContadorDosisDesdeAhora()
         }
-
-
 
         findViewById<Button>(R.id.btnEliminar).setOnClickListener {
             eliminarMedicamento()
         }
     }
-
 
     private fun iniciarCuentaRegresiva() {
         val tiempoRestante = fechaFin - System.currentTimeMillis()
@@ -92,12 +88,38 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarTiempoProximaDosis(fechaCreacion: Long) {
+    private fun obtenerUltimaTomaYMostrarProximaDosis() {
+        val userId = auth.currentUser?.uid ?: return
+
+        db.collection("usuarios")
+            .document(userId)
+            .collection("medicamentos")
+            .whereEqualTo("nombre", nombre)
+            .whereEqualTo("dosis", dosis)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val document = documents.documents[0]
+                    ultimaToma = document.getLong("ultimaToma") ?: document.getLong("fechaCreacion") ?: System.currentTimeMillis()
+                    mostrarTiempoProximaDosis(ultimaToma!!)
+                } else {
+                    // Si no hay documento, usar fecha actual como última toma
+                    ultimaToma = System.currentTimeMillis()
+                    mostrarTiempoProximaDosis(ultimaToma!!)
+                }
+            }
+            .addOnFailureListener {
+                // En caso de error, usar fecha actual
+                ultimaToma = System.currentTimeMillis()
+                mostrarTiempoProximaDosis(ultimaToma!!)
+            }
+    }
+
+    private fun mostrarTiempoProximaDosis(ultimaToma: Long) {
         val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
         val ahora = System.currentTimeMillis()
-        val tiempoTranscurrido = ahora - fechaCreacion
+        val tiempoTranscurrido = ahora - ultimaToma
         val tiempoRestante = frecuenciaMillis - (tiempoTranscurrido % frecuenciaMillis)
-        val proximaDosisEn = ahora + tiempoRestante
 
         countDownDosis?.cancel()
         countDownDosis = object : CountDownTimer(tiempoRestante, 1000) {
@@ -114,9 +136,8 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
             }
         }.start()
 
-        // Mostrar hora exacta de la próxima dosis (opcional)
         val formato = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val horaExacta = formato.format(Date(proximaDosisEn))
+        val horaExacta = formato.format(Date(ahora + tiempoRestante))
         Toast.makeText(this, "🕐 Próxima dosis a las $horaExacta", Toast.LENGTH_SHORT).show()
     }
 
@@ -139,31 +160,31 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
             }
         }.start()
 
-        registrarTomaEnHistorial()
-
+        val ahora = System.currentTimeMillis()
+        actualizarUltimaTomaEnFirestore(ahora)
         Toast.makeText(this, "✅ Dosis marcada como tomada", Toast.LENGTH_SHORT).show()
     }
 
-    private fun registrarTomaEnHistorial() {
+    private fun actualizarUltimaTomaEnFirestore(timestamp: Long) {
         val userId = auth.currentUser?.uid ?: return
-
-        val historialData = hashMapOf(
-            "nombre" to nombre,
-            "dosis" to dosis,
-            "timestamp" to FieldValue.serverTimestamp()
-        )
 
         db.collection("usuarios")
             .document(userId)
-            .collection("historial_tomas")
-            .add(historialData)
-            .addOnSuccessListener {
-                Log.d("Firestore", "✅ Historial registrado")
-            }
-            .addOnFailureListener {
-                Log.e("Firestore", "❌ Error al registrar historial", it)
+            .collection("medicamentos")
+            .whereEqualTo("nombre", nombre)
+            .whereEqualTo("dosis", dosis)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    db.collection("usuarios")
+                        .document(userId)
+                        .collection("medicamentos")
+                        .document(document.id)
+                        .update("ultimaToma", timestamp)
+                }
             }
     }
+
     private fun eliminarMedicamento() {
         val userId = auth.currentUser?.uid
         if (userId != null) {

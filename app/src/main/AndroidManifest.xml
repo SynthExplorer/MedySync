@@ -21,6 +21,9 @@
         <receiver android:name=".NotificacionReceiver" />
         <receiver android:name=".CitaNotificacionReceiver" />
 
+        <receiver android:name=".DetenerNotificacionReceiver" />
+
+
 
 
         <provider

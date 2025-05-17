@@ -30,7 +30,7 @@ class CitaNotificacionReceiver : BroadcastReceiver() {
         }
 
         val builder = NotificationCompat.Builder(context, "cita_channel")
-            .setSmallIcon(R.drawable.ic_notification) // Pon aquí tu icono
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(titulo)
             .setContentText(descripcion)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
