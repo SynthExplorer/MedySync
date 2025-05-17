@@ -42,6 +42,17 @@
             android:layout_marginTop="16dp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCrearCita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📅 Crear Cita Médica"
+            android:textColor="@color/white"
+            app:backgroundTint="#4CAF50"
+            app:cornerRadius="16dp"
+            app:iconPadding="12dp"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,4 +75,3 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -40,9 +40,11 @@ class SeetingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-
-
+        val btnCrearCita = findViewById<MaterialButton>(R.id.btnCrearCita)
+        btnCrearCita.setOnClickListener {
+            val intent = Intent(this, CrearCitaActivity::class.java)
+            startActivity(intent)
+        }
 
         val btnCerrarSesion = findViewById<MaterialButton>(R.id.btnCerrarSesion)
 
