@@ -76,7 +76,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                     val diasRestantes = dias % 30
 
                     tvTiempoRestante.text =
-                        "${meses}m ${diasRestantes}d ${horas}h ${minutos}m ${segundos}s restantes"
+                        "${meses}m ${diasRestantes}d ${horas}h ${minutos}m ${segundos}s "
                 }
 
                 override fun onFinish() {
@@ -128,7 +128,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                 val minutos = (millisUntilFinished / (1000 * 60)) % 60
                 val segundos = (millisUntilFinished / 1000) % 60
 
-                tvProximaDosis.text = "Próxima dosis en: ${horas}h ${minutos}m ${segundos}s"
+                tvProximaDosis.text = "${horas}h ${minutos}m ${segundos}s"
             }
 
             override fun onFinish() {
@@ -152,7 +152,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                 val minutos = (millisUntilFinished / (1000 * 60)) % 60
                 val segundos = (millisUntilFinished / 1000) % 60
 
-                tvProximaDosis.text = "Próxima dosis en: ${horas}h ${minutos}m ${segundos}s"
+                tvProximaDosis.text = "${horas}h ${minutos}m ${segundos}s"
             }
 
             override fun onFinish() {

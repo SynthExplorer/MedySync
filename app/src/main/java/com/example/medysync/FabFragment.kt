@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -28,24 +29,32 @@ class FabFragment : Fragment() {
         fabOpcion1.setOnClickListener {
             if (requireActivity() !is Actividad1) {
                 startActivity(Intent(requireContext(), Actividad1::class.java))
+            }else {
+                Toast.makeText(requireContext(), "Ya estás en esta vista", Toast.LENGTH_SHORT).show()
             }
         }
 
         fabOpcion2.setOnClickListener {
             if (requireActivity() !is Actividad2) {
                 startActivity(Intent(requireContext(), Actividad2::class.java))
+            }else {
+                Toast.makeText(requireContext(), "Ya estás en esta vista", Toast.LENGTH_SHORT).show()
             }
         }
 
         fabHome.setOnClickListener {
             if (requireActivity() !is MainActivity) {
                 startActivity(Intent(requireContext(), MainActivity::class.java))
+            }else {
+                Toast.makeText(requireContext(), "Ya estás en esta vista", Toast.LENGTH_SHORT).show()
             }
         }
 
         fabSeetings.setOnClickListener {
             if (requireActivity() !is SeetingsActivity) {
                 startActivity(Intent(requireContext(), SeetingsActivity::class.java))
+            }else {
+                Toast.makeText(requireContext(), "Ya estás en esta vista", Toast.LENGTH_SHORT).show()
             }
         }
 

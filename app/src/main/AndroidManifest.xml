@@ -37,6 +37,7 @@
         </provider>
 
         <activity android:name=".CrearCitaActivity" />
+        <activity android:name=".HistorialCitasActivity" />
 
 
         <activity android:name=".HistorialTomasActivity" />

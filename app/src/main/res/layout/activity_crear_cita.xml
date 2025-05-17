@@ -5,17 +5,20 @@
     android:id="@+id/crearCitaLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#121212"
     android:padding="24dp"
     tools:context=".CrearCitaActivity">
 
+    <!-- Título -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTitulo"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Título"
-        app:boxStrokeColor="#9C27B0"
+        android:hint="Título de la cita"
+        app:boxStrokeColor="#BB86FC"
         app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -23,17 +26,20 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTitulo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Descripción -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilDescripcion"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Descripción"
-        app:boxStrokeColor="#9C27B0"
+        app:boxStrokeColor="#BB86FC"
         app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tilTitulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,17 +48,20 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etDescripcion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Fecha -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilFecha"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Fecha"
-        app:boxStrokeColor="#9C27B0"
+        app:boxStrokeColor="#BB86FC"
         app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tilDescripcion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,17 +72,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:clickable="true" />
+            android:clickable="true"
+            android:textColor="@android:color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Hora -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilHora"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Hora"
-        app:boxStrokeColor="#9C27B0"
+        app:boxStrokeColor="#BB86FC"
         app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tilFecha"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,17 +96,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:clickable="true" />
+            android:clickable="true"
+            android:textColor="@android:color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Frecuencia -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilFrecuencia"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Frecuencia"
-        app:boxStrokeColor="#9C27B0"
+        app:boxStrokeColor="#BB86FC"
         app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tilHora"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,19 +122,22 @@
             android:inputType="none"
             android:focusable="false"
             android:clickable="true"
-            android:cursorVisible="false" />
+            android:cursorVisible="false"
+            android:textColor="@android:color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <!-- Botón Guardar -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGuardar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Guardar Cita"
         style="@style/Widget.MaterialComponents.Button"
-        android:backgroundTint="#9C27B0"
+        android:backgroundTint="#BB86FC"
         android:textColor="@android:color/white"
-        app:cornerRadius="12dp"
+        app:cornerRadius="16dp"
+        app:iconPadding="8dp"
+        android:icon="@drawable/ic_save"
         app:layout_constraintTop_toBottomOf="@id/tilFrecuencia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

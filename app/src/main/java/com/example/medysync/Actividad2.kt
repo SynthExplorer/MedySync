@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -26,10 +27,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
+const val CHANNEL_ID = "canal_medicamentos"
+
 class Actividad2 : AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
     private var frecuenciaHoras = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class Actividad2 : AppCompatActivity() {
                 1
             )
         }
+
 
         val sliderFrecuencia = findViewById<Slider>(R.id.sliderFrecuencia)
         val tvFrecuencia = findViewById<TextView>(R.id.tvFrecuenciaSeleccionada)
@@ -62,7 +67,6 @@ class Actividad2 : AppCompatActivity() {
         val npMeses = findViewById<NumberPicker>(R.id.npMeses)
         val btnGuardar = findViewById<Button>(R.id.btnGuardar)
 
-        // Configurar rangos de NumberPickers
         npHoras.minValue = 0; npHoras.maxValue = 23
         npDias.minValue = 0; npDias.maxValue = 30
         npSemanas.minValue = 0; npSemanas.maxValue = 4
@@ -90,13 +94,12 @@ class Actividad2 : AppCompatActivity() {
 
             val fechaFin = System.currentTimeMillis() + duracionMilis
             val idUnico = UUID.randomUUID().toString()
-            val frecuenciaTexto = "Cada ${frecuenciaHoras}h"
             val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
 
             val medicamento = Medicamento(
                 nombre = nombre,
                 dosis = dosis,
-                frecuencia = frecuenciaTexto,
+                frecuencia = "Cada ${frecuenciaHoras}h",
                 frecuenciaHoras = frecuenciaHoras,
                 fechaFin = fechaFin,
                 id = idUnico,
@@ -128,16 +131,15 @@ class Actividad2 : AppCompatActivity() {
     }
 
     private fun crearCanalNotificacion() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val canal = NotificationChannel(
-                "canal_meds",
-                "Recordatorios",
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Recordatorios Medicamentos",
                 NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Canal para recordar medicamentos"
-            }
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(canal)
+            )
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
         }
     }
 
@@ -145,6 +147,9 @@ class Actividad2 : AppCompatActivity() {
         val intent = Intent(this, NotificacionReceiver::class.java).apply {
             putExtra("nombre", medicamento.nombre)
             putExtra("dosis", medicamento.dosis)
+            putExtra("frecuenciaMillis", frecuenciaMillis)
+            putExtra("id", medicamento.id)
+            putExtra("fechaFin", medicamento.fechaFin)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -157,17 +162,12 @@ class Actividad2 : AppCompatActivity() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val triggerAtMillis = System.currentTimeMillis() + frecuenciaMillis
 
-        // Notificación repetitiva
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            triggerAtMillis,
-            frecuenciaMillis,
-            pendingIntent
-        )
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
 
-        // Alarma para detener notificación al llegar a la fechaFin
+        // Alarma para detener la notificación al llegar a la fechaFin
         val detenerIntent = Intent(this, DetenerNotificacionReceiver::class.java).apply {
             putExtra("idUnico", medicamento.id)
+            putExtra("pendingIntentRequestCode", medicamento.id.hashCode())
         }
 
         val detenerPendingIntent = PendingIntent.getBroadcast(
@@ -182,7 +182,7 @@ class Actividad2 : AppCompatActivity() {
             medicamento.fechaFin,
             detenerPendingIntent
         )
+
+        Log.d("Actividad2", "Notificación programada para ${triggerAtMillis}, detener en ${medicamento.fechaFin}")
     }
-
-
 }

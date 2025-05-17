@@ -14,9 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
-
-
-
 class HistorialTomasActivity : AppCompatActivity() {
 
     private lateinit var rvHistorial: RecyclerView
@@ -45,9 +42,13 @@ class HistorialTomasActivity : AppCompatActivity() {
             .commit()
     }
 
-
     private fun cargarHistorial() {
         val userId = auth.currentUser?.uid ?: return
+
+        val ahora = Date()
+        val dosDiasAtras = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -2)
+        }.time
 
         db.collection("usuarios")
             .document(userId)
@@ -57,11 +58,19 @@ class HistorialTomasActivity : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 historialList.clear()
                 for (doc in documents) {
-                    val nombre = doc.getString("nombre") ?: "Desconocido"
-                    val dosis = doc.getString("dosis") ?: "N/A"
                     val timestamp = doc.getTimestamp("timestamp")?.toDate()
 
-                    historialList.add(HistorialToma(nombre, dosis, timestamp))
+                    if (timestamp != null && timestamp.after(dosDiasAtras)) {
+                        val nombre = doc.getString("nombre") ?: "Desconocido"
+                        val dosis = doc.getString("dosis") ?: "N/A"
+                        historialList.add(HistorialToma(nombre, dosis, timestamp))
+                    } else {
+                        db.collection("usuarios")
+                            .document(userId)
+                            .collection("historial_tomas")
+                            .document(doc.id)
+                            .delete()
+                    }
                 }
                 adapter.notifyDataSetChanged()
             }
@@ -69,4 +78,5 @@ class HistorialTomasActivity : AppCompatActivity() {
                 Toast.makeText(this, "❌ Error al cargar historial", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

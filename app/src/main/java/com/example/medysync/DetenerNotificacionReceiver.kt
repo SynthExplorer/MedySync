@@ -10,17 +10,22 @@ import android.util.Log
 class DetenerNotificacionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val idUnico = intent.getStringExtra("idUnico") ?: return
+        val requestCode = intent.getIntExtra("pendingIntentRequestCode", 0)
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            idUnico.hashCode(),
-            Intent(context, NotificacionReceiver::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        Log.d("DetenerNotificacion", "Cancelando alarma para medicamento id: $idUnico")
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            Intent(context, NotificacionReceiver::class.java),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        Log.d("DetenerNotificacion", "⛔ Notificación cancelada para ID: $idUnico")
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+            Log.d("DetenerNotificacion", "Alarma cancelada")
+        }
     }
 }
