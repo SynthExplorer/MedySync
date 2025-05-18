@@ -25,6 +25,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.slider.Slider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Date
 import java.util.UUID
 
 const val CHANNEL_ID = "canal_medicamentos"
@@ -88,7 +89,8 @@ class Actividad2 : AppCompatActivity() {
                         npMeses.value * 30L * 24 * 60 * 60 * 1000L
 
             if (duracionMilis <= 0) {
-                Toast.makeText(this, "⚠️ Selecciona una duración válida ⚠️", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "⚠️ Selecciona una duración válida ⚠️", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -144,6 +146,10 @@ class Actividad2 : AppCompatActivity() {
     }
 
     private fun programarNotificacion(medicamento: Medicamento, frecuenciaMillis: Long) {
+        // El tiempo en que debe saltar la primera notificación
+        val triggerTime = System.currentTimeMillis() + frecuenciaMillis
+
+        // Intent para el BroadcastReceiver que muestra la notificación
         val intent = Intent(this, NotificacionReceiver::class.java).apply {
             putExtra("nombre", medicamento.nombre)
             putExtra("dosis", medicamento.dosis)
@@ -152,22 +158,62 @@ class Actividad2 : AppCompatActivity() {
             putExtra("fechaFin", medicamento.fechaFin)
         }
 
+        val requestCode = medicamento.id.hashCode()
         val pendingIntent = PendingIntent.getBroadcast(
             this,
-            medicamento.id.hashCode(),
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val triggerAtMillis = System.currentTimeMillis() + frecuenciaMillis
 
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+        // Cancelar cualquier alarma anterior con el mismo ID
+        try {
+            alarmManager.cancel(pendingIntent)
+            Log.d("Actividad2", "Alarma anterior cancelada para medicamento ID: ${medicamento.id}")
+        } catch (e: Exception) {
+            Log.e("Actividad2", "Error al cancelar alarma anterior: ${e.message}")
+        }
 
-        // Alarma para detener la notificación al llegar a la fechaFin
+        // Programar la nueva alarma con manejo de excepciones
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+                    Log.d("Actividad2", "Alarma exacta programada para: ${Date(triggerTime)}")
+                } else {
+                    // Si no podemos programar alarmas exactas en Android 12+, usar una aproximada
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+                    Log.d("Actividad2", "Alarma aproximada programada para: ${Date(triggerTime)}")
+
+                    // Mostrar mensaje al usuario
+                    Toast.makeText(
+                        this,
+                        "Para mayor precisión en recordatorios, habilita alarmas exactas en la configuración",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+                Log.d("Actividad2", "Alarma exacta programada para: ${Date(triggerTime)}")
+            }
+        } catch (e: Exception) {
+            Log.e("Actividad2", "Error al programar alarma exacta: ${e.message}")
+
+            // Método de reserva en caso de error
+            try {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+                Log.d("Actividad2", "Alarma de reserva programada")
+            } catch (e: Exception) {
+                Log.e("Actividad2", "Error al programar alarma de reserva: ${e.message}")
+            }
+        }
+
+        // Intent para detener la notificación cuando llegue la fechaFin
         val detenerIntent = Intent(this, DetenerNotificacionReceiver::class.java).apply {
             putExtra("idUnico", medicamento.id)
-            putExtra("pendingIntentRequestCode", medicamento.id.hashCode())
+            putExtra("pendingIntentRequestCode", requestCode)
         }
 
         val detenerPendingIntent = PendingIntent.getBroadcast(
@@ -177,12 +223,20 @@ class Actividad2 : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            medicamento.fechaFin,
-            detenerPendingIntent
-        )
+        try {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                medicamento.fechaFin,
+                detenerPendingIntent
+            )
+            Log.d("Actividad2", "Alarma de finalización programada para: ${Date(medicamento.fechaFin)}")
+        } catch (e: Exception) {
+            Log.e("Actividad2", "Error al programar alarma de finalización: ${e.message}")
+        }
 
-        Log.d("Actividad2", "Notificación programada para ${triggerAtMillis}, detener en ${medicamento.fechaFin}")
+        Log.d(
+            "Actividad2",
+            "Notificación programada para $triggerTime, detener en ${medicamento.fechaFin}"
+        )
     }
 }

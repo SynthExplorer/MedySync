@@ -32,30 +32,27 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
         holder.nombre.text = medicamento.nombre
         holder.dosis.text = medicamento.dosis
 
-        // Cancelar cualquier temporizador anterior
+        // Cancelar temporizador anterior
         holder.countDownTimer?.cancel()
 
         val tiempoRestante = medicamento.fechaFin - System.currentTimeMillis()
 
         if (tiempoRestante > 0) {
-            // Verificar si ya existe un temporizador antes de crear uno nuevo
-
             holder.countDownTimer = object : CountDownTimer(tiempoRestante, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    val segundos = millisUntilFinished / 1000 % 60
-                    val minutos = millisUntilFinished / (1000 * 60) % 60
-                    val horas = millisUntilFinished / (1000 * 60 * 60) % 24
-                    val dias = millisUntilFinished / (1000 * 60 * 60 * 24)
+                    val segundos = (millisUntilFinished / 1000) % 60
+                    val minutos = (millisUntilFinished / (1000 * 60)) % 60
+                    val horas = (millisUntilFinished / (1000 * 60 * 60)) % 24
+                    val dias = (millisUntilFinished / (1000 * 60 * 60 * 24))
                     holder.tvTiempoRestante.text = "$dias d $horas h $minutos m $segundos s"
                 }
 
                 override fun onFinish() {
-                    holder.tvTiempoRestante.text = "Tratamiento finalizado"
+                    holder.tvTiempoRestante.text = "🛑 Tratamiento finalizado"
                 }
-            }
-            holder.countDownTimer?.start()
+            }.start()
         } else {
-            holder.tvTiempoRestante.text = "Tratamiento finalizado"
+            holder.tvTiempoRestante.text = "🛑 Tratamiento finalizado"
         }
 
         holder.itemView.setOnClickListener {
@@ -66,7 +63,6 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
                 putExtra("dosis", medicamento.dosis)
                 putExtra("fechaFin", medicamento.fechaFin)
                 putExtra("frecuenciaHoras", medicamento.frecuenciaHoras)
-
             }
             context.startActivity(intent)
         }
@@ -74,7 +70,6 @@ class MedicamentoAdapter(private val listaMedicamentos: List<Medicamento>) :
 
     override fun onViewRecycled(holder: MedicamentoViewHolder) {
         super.onViewRecycled(holder)
-        //
         holder.countDownTimer?.cancel()
     }
 

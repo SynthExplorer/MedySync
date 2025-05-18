@@ -1,10 +1,9 @@
 package com.example.medysync
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -13,8 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class MedicamentoDetalleActivity : AppCompatActivity() {
 
@@ -31,7 +29,10 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
     private var dosis: String = ""
     private var frecuenciaHoras: Int = 1
 
-    private var ultimaToma: Long? = null  // Nuevo campo
+    private var ultimaToma: Long? = null
+
+    private lateinit var idMedicamento: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,8 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
+        idMedicamento = intent.getStringExtra("id") ?: ""
 
         nombre = intent.getStringExtra("nombre") ?: "No disponible"
         dosis = intent.getStringExtra("dosis") ?: "No disponible"
@@ -59,7 +62,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnEliminar).setOnClickListener {
-            eliminarMedicamento()
+            eliminarMedicamento(intent.getStringExtra("id") ?: "")
         }
     }
 
@@ -76,7 +79,7 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                     val diasRestantes = dias % 30
 
                     tvTiempoRestante.text =
-                        "${meses}m ${diasRestantes}d ${horas}h ${minutos}m ${segundos}s "
+                        "${meses}m ${diasRestantes}d ${horas}h ${minutos}m ${segundos}s"
                 }
 
                 override fun onFinish() {
@@ -103,21 +106,24 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
                     ultimaToma = document.getLong("ultimaToma") ?: document.getLong("fechaCreacion") ?: System.currentTimeMillis()
                     mostrarTiempoProximaDosis(ultimaToma!!)
                 } else {
-                    // Si no hay documento, usar fecha actual como última toma
                     ultimaToma = System.currentTimeMillis()
                     mostrarTiempoProximaDosis(ultimaToma!!)
                 }
             }
             .addOnFailureListener {
-                // En caso de error, usar fecha actual
                 ultimaToma = System.currentTimeMillis()
                 mostrarTiempoProximaDosis(ultimaToma!!)
             }
     }
 
     private fun mostrarTiempoProximaDosis(ultimaToma: Long) {
-        val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
         val ahora = System.currentTimeMillis()
+        if (ahora >= fechaFin) {
+            tvProximaDosis.text = "🛑 Tratamiento finalizado, no hay próximas dosis"
+            return
+        }
+
+        val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
         val tiempoTranscurrido = ahora - ultimaToma
         val tiempoRestante = frecuenciaMillis - (tiempoTranscurrido % frecuenciaMillis)
 
@@ -132,7 +138,15 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                tvProximaDosis.text = "💊 ¡Es hora de tu próxima dosis!"
+                val ahoraFinal = System.currentTimeMillis()
+                if (ahoraFinal < fechaFin) {
+                    tvProximaDosis.text = "¡Es hora de tu próxima dosis!"
+                    agregarHistorialToma()
+                    actualizarUltimaTomaEnFirestore(ahoraFinal)
+                    mostrarTiempoProximaDosis(ahoraFinal)
+                } else {
+                    tvProximaDosis.text = "🛑 Tratamiento finalizado, no hay próximas dosis"
+                }
             }
         }.start()
 
@@ -142,8 +156,15 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
     }
 
     private fun reiniciarContadorDosisDesdeAhora() {
-        countDownDosis?.cancel()
+        val ahora = System.currentTimeMillis()
+        if (ahora >= fechaFin) {
+            tvProximaDosis.text = "🛑 Tratamiento finalizado, no hay próximas dosis"
+            Toast.makeText(this, "El tratamiento ya finalizó", Toast.LENGTH_SHORT).show()
+            countDownDosis?.cancel()
+            return
+        }
 
+        countDownDosis?.cancel()
         val frecuenciaMillis = frecuenciaHoras * 60 * 60 * 1000L
 
         countDownDosis = object : CountDownTimer(frecuenciaMillis, 1000) {
@@ -156,18 +177,24 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                tvProximaDosis.text = "💊 ¡Es hora de tu próxima dosis!"
+                tvProximaDosis.text = "¡Es hora de tu próxima dosis!"
+                agregarHistorialToma()
+                val nuevoAhora = System.currentTimeMillis()
+                actualizarUltimaTomaEnFirestore(nuevoAhora)
+                mostrarTiempoProximaDosis(nuevoAhora)
             }
         }.start()
 
-        val ahora = System.currentTimeMillis()
+        agregarHistorialToma()
         actualizarUltimaTomaEnFirestore(ahora)
-        Toast.makeText(this, "✅ Dosis marcada como tomada", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Dosis marcada como tomada", Toast.LENGTH_SHORT).show()
     }
 
-    private fun actualizarUltimaTomaEnFirestore(timestamp: Long) {
-        val userId = auth.currentUser?.uid ?: return
 
+    private fun actualizarUltimaTomaEnFirestore(timestamp: Long) {
+        if (timestamp >= fechaFin) return // 🚫 No actualizar si el tratamiento ya terminó
+
+        val userId = auth.currentUser?.uid ?: return
         db.collection("usuarios")
             .document(userId)
             .collection("medicamentos")
@@ -185,29 +212,52 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
             }
     }
 
-    private fun eliminarMedicamento() {
-        val userId = auth.currentUser?.uid
+    private fun agregarHistorialToma() {
+        val userId = auth.currentUser?.uid ?: return
+
+        val nuevaToma = hashMapOf(
+            "medicamentoId" to idMedicamento,
+            "nombre" to nombre,
+            "dosis" to dosis,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("usuarios")
+            .document(userId)
+            .collection("historial_tomas")
+            .add(nuevaToma)
+            .addOnSuccessListener {
+                Toast.makeText(this, "✅ Toma agregada al historial", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "❌ Error al agregar al historial", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+    private fun cancelarNotificacion(notificationId: Int) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notificationId)
+    }
+
+    private fun eliminarMedicamento(id: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
             db.collection("usuarios")
                 .document(userId)
                 .collection("medicamentos")
-                .whereEqualTo("nombre", nombre)
-                .whereEqualTo("dosis", dosis)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        db.collection("usuarios")
-                            .document(userId)
-                            .collection("medicamentos")
-                            .document(document.id)
-                            .delete()
-                    }
-                    Toast.makeText(this, "✅ Medicamento eliminado", Toast.LENGTH_SHORT).show()
+                .document(id)
+                .delete()
+                .addOnSuccessListener {
+                    cancelarNotificacion(id.hashCode())
+                    Toast.makeText(this, "Medicamento eliminado", Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                .addOnFailureListener {
-                    Toast.makeText(this, "❌ Error al eliminar", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error al eliminar medicamento: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+        } else {
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
 

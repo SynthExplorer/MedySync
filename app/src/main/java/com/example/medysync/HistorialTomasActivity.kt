@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
+
 class HistorialTomasActivity : AppCompatActivity() {
 
     private lateinit var rvHistorial: RecyclerView
@@ -78,5 +79,6 @@ class HistorialTomasActivity : AppCompatActivity() {
                 Toast.makeText(this, "❌ Error al cargar historial", Toast.LENGTH_SHORT).show()
             }
     }
+
 
 }
