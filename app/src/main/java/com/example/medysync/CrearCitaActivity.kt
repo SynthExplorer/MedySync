@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class CrearCitaActivity : AppCompatActivity() {
@@ -53,16 +55,14 @@ class CrearCitaActivity : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
 
-        // Configurar AutoCompleteTextView para frecuencia
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, opcionesFrecuencia)
         etFrecuencia.setAdapter(adapter)
 
-        // Mostrar dropdown al hacer click
+
         etFrecuencia.setOnClickListener {
             etFrecuencia.showDropDown()
         }
 
-        // Al hacer click o focus en Fecha, abrir DatePickerDialog
         etFecha.setOnClickListener { seleccionarFecha() }
         etFecha.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -70,7 +70,6 @@ class CrearCitaActivity : AppCompatActivity() {
             }
         }
 
-        // Al hacer click o focus en Hora, abrir TimePickerDialog
         etHora.setOnClickListener { seleccionarHora() }
         etHora.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -136,6 +135,7 @@ class CrearCitaActivity : AppCompatActivity() {
             .set(cita)
             .addOnSuccessListener {
                 programarNotificacion(cita)
+                guardarEnHistorialCitas(cita)
                 Toast.makeText(this, "Cita guardada y notificación programada", Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -143,29 +143,35 @@ class CrearCitaActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al guardar cita", Toast.LENGTH_SHORT).show()
             }
     }
-
-
     private fun programarNotificacion(cita: Cita) {
         val intent = Intent(this, CitaNotificacionReceiver::class.java).apply {
             putExtra("titulo", cita.titulo)
             putExtra("descripcion", cita.descripcion)
+            putExtra("fecha", cita.fecha)
+            putExtra("hora", cita.hora)
         }
 
+        val requestCode = cita.id.hashCode()
         val pendingIntent = PendingIntent.getBroadcast(
             this,
-            cita.id.hashCode(),
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent) // Cancelar notificación anterior si existe
 
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val fechaHora = sdf.parse("${cita.fecha} ${cita.hora}") ?: return
+        val fechaHora: Date = try {
+            sdf.parse("${cita.fecha} ${cita.hora}") ?: throw IllegalArgumentException()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Fecha u hora inválida", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         when (cita.frecuencia) {
             "Una vez" -> {
-                // Usar setExactAndAllowWhileIdle para asegurar la notificación
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fechaHora.time, pendingIntent)
                 } else {
@@ -188,14 +194,39 @@ class CrearCitaActivity : AppCompatActivity() {
                     pendingIntent
                 )
             }
-            else -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fechaHora.time, pendingIntent)
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, fechaHora.time, pendingIntent)
-                }
-            }
         }
     }
+    private fun guardarEnHistorialCitas(cita: Cita) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            val historialId = db.collection("usuarios").document(userId)
+                .collection("historial_citas").document().id
+
+            val historial = hashMapOf(
+                "id" to historialId,
+                "titulo" to cita.titulo,
+                "descripcion" to cita.descripcion,
+                "fecha" to cita.fecha,
+                "hora" to cita.hora,
+                "frecuencia" to cita.frecuencia,
+                "timestamp" to System.currentTimeMillis()
+            )
+
+            db.collection("usuarios")
+                .document(userId)
+                .collection("historial_citas")
+                .document(historialId)
+                .set(historial)
+                .addOnSuccessListener {
+                    Log.d("HistorialCita", "Historial guardado con éxito")
+                }
+                .addOnFailureListener {
+                    Log.e("HistorialCita", "Error al guardar historial: ${it.message}")
+                }
+        }
+    }
+
+
 }
 

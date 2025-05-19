@@ -215,26 +215,48 @@ class MedicamentoDetalleActivity : AppCompatActivity() {
     private fun agregarHistorialToma() {
         val userId = auth.currentUser?.uid ?: return
 
-        val nuevaToma = hashMapOf(
-            "medicamentoId" to idMedicamento,
-            "nombre" to nombre,
-            "dosis" to dosis,
-            "timestamp" to FieldValue.serverTimestamp()
-        )
-
+        // Obtener los datos completos del medicamento
         db.collection("usuarios")
             .document(userId)
-            .collection("historial_tomas")
-            .add(nuevaToma)
-            .addOnSuccessListener {
-                Toast.makeText(this, "✅ Toma agregada al historial", Toast.LENGTH_SHORT).show()
+            .collection("medicamentos")
+            .document(idMedicamento)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val frecuencia = document.getString("frecuencia") ?: "N/A"
+                    val frecuenciaHoras = document.getLong("frecuenciaHoras")?.toInt() ?: 0
+                    val fechaFin = document.getLong("fechaFin") ?: 0L
+                    val fechaCreacion = document.getLong("fechaCreacion") ?: 0L
+
+                    val nuevaToma = hashMapOf(
+                        "medicamentoId" to idMedicamento,
+                        "nombre" to nombre,
+                        "dosis" to dosis,
+                        "frecuencia" to frecuencia,
+                        "frecuenciaHoras" to frecuenciaHoras,
+                        "fechaFin" to fechaFin,
+                        "fechaCreacion" to fechaCreacion,
+                        "timestamp" to FieldValue.serverTimestamp()
+                    )
+
+                    db.collection("usuarios")
+                        .document(userId)
+                        .collection("historial_tomas")
+                        .add(nuevaToma)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "✅ Toma agregada al historial", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "❌ Error al agregar al historial", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "❌ Medicamento no encontrado", Toast.LENGTH_SHORT).show()
+                }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "❌ Error al agregar al historial", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "❌ Error al obtener datos del medicamento", Toast.LENGTH_SHORT).show()
             }
     }
-
-
     private fun cancelarNotificacion(notificationId: Int) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(notificationId)

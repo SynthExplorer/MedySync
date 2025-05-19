@@ -15,6 +15,8 @@ class CitaNotificacionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val titulo = intent.getStringExtra("titulo") ?: "Recordatorio"
         val descripcion = intent.getStringExtra("descripcion") ?: ""
+        val fecha = intent.getStringExtra("fecha") ?: ""
+        val hora = intent.getStringExtra("hora") ?: ""
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -29,10 +31,13 @@ class CitaNotificacionReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(canal)
         }
 
+        val contenido = "$descripcion\nFecha: $fecha a las $hora"
+
         val builder = NotificationCompat.Builder(context, "cita_channel")
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(titulo)
-            .setContentText(descripcion)
+            .setContentText(contenido)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(contenido)) // Mostrar todo el texto
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
 

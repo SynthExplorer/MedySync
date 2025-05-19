@@ -40,8 +40,14 @@ class TomarMedicamentoReceiver : BroadcastReceiver() {
                     Log.e("TomarMedicamento", "Error al actualizar última toma: ${it.message}")
                 }
 
-            // Agregar al historial
+            // Agregar al historial con ID único
+            val historialId = db.collection("usuarios")
+                .document(userId)
+                .collection("historial_tomas")
+                .document().id
+
             val nuevaToma = hashMapOf(
+                "id" to historialId,
                 "medicamentoId" to id,
                 "nombre" to nombre,
                 "dosis" to dosis,
@@ -51,7 +57,8 @@ class TomarMedicamentoReceiver : BroadcastReceiver() {
             db.collection("usuarios")
                 .document(userId)
                 .collection("historial_tomas")
-                .add(nuevaToma)
+                .document(historialId)
+                .set(nuevaToma)
                 .addOnSuccessListener {
                     Log.d("TomarMedicamento", "Toma agregada al historial")
                     Toast.makeText(context, "✅ Medicamento registrado como tomado", Toast.LENGTH_SHORT).show()

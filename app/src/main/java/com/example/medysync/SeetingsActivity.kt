@@ -51,6 +51,19 @@ class SeetingsActivity : AppCompatActivity() {
             startActivity(Intent(this, HistorialCitasActivity::class.java))
         }
 
+        val btnActualizarPerfil = findViewById<Button>(R.id.btnActualizarPerfil)
+        btnActualizarPerfil.setOnClickListener {
+            val intent = Intent(this, ActualizarPerfilActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnInforme = findViewById<Button>(R.id.btnInformeActivity)
+        btnInforme.setOnClickListener {
+            val intent = Intent(this, InformeActivity::class.java)
+            startActivity(intent)
+        }
+
+
         val btnCerrarSesion = findViewById<MaterialButton>(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener {

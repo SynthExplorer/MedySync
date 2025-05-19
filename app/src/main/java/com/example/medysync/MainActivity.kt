@@ -30,14 +30,16 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragmentContainer, FabFragment())
             .commit()
 
-        val tvNombre = findViewById<TextView>(R.id.tvNombre)
-        val tvApellido = findViewById<TextView>(R.id.tvApellido)
-        val tvCedula = findViewById<TextView>(R.id.tvCedula)
-
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        val currentUser = auth.currentUser
+    }
 
+    override fun onResume() {
+        super.onResume()
+        actualizarDatosUsuario()
+    }
+    private fun actualizarDatosUsuario() {
+        val currentUser = auth.currentUser
         if (currentUser != null) {
             val userId = currentUser.uid
             db.collection("usuarios").document(userId).get()
@@ -46,12 +48,13 @@ class MainActivity : AppCompatActivity() {
                         val nombre = document.getString("nombre") ?: "Usuario"
                         val apellido = document.getString("apellido") ?: ""
                         val cedula = document.getString("id") ?: ""
+                        val tvNombre = findViewById<TextView>(R.id.tvNombre)
+                        val tvApellido = findViewById<TextView>(R.id.tvApellido)
+                        val tvCedula = findViewById<TextView>(R.id.tvCedula)
+
                         tvNombre.text = nombre
                         tvApellido.text = apellido
                         tvCedula.text = cedula
-
-
-                        //tvSaludo.text = "Bienvenido, $nombre $apellido con cédula $cedula"
                     } else {
                         Toast.makeText(this, "Error al obtener los datos del usuario", Toast.LENGTH_SHORT).show()
                     }
@@ -63,4 +66,5 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

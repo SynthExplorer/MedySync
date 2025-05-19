@@ -18,28 +18,24 @@ import java.util.Date
 
 class NotificacionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Recuperar datos
+
         val nombre = intent.getStringExtra("nombre") ?: return
         val dosis = intent.getStringExtra("dosis") ?: return
         val frecuenciaMillis = intent.getLongExtra("frecuenciaMillis", -1L)
         val id = intent.getStringExtra("id") ?: return
         val fechaFin = intent.getLongExtra("fechaFin", 0L)
 
-        // Registrar la recepción para depuración
+
         Log.d("NotificacionReceiver", "Notificación recibida para: $nombre, ID: $id")
 
         val now = System.currentTimeMillis()
 
-        // Mostrar la notificación
         mostrarNotificacion(context, nombre, dosis, id.hashCode())
 
-        // Comprobar si no hemos pasado la fechaFin
         if (now < fechaFin && frecuenciaMillis > 0) {
-            // Calcular el próximo trigger time
             val siguienteTrigger = now + frecuenciaMillis
 
             if (siguienteTrigger < fechaFin) {
-                // Reprogramar la siguiente notificación
                 val nuevoIntent = Intent(context, NotificacionReceiver::class.java).apply {
                     putExtra("nombre", nombre)
                     putExtra("dosis", dosis)

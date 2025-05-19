@@ -86,6 +86,35 @@
                 android:layout_marginStart="8dp"/>
         </LinearLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnInformeActivity"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="👤 Actualizar Perfil"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:iconPadding="12dp"
+            app:backgroundTint="#9C27B0"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnActualizarPerfil"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="👤 Actualizar Perfil"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:iconPadding="12dp"
+            app:backgroundTint="#9C27B0"
+            android:layout_marginTop="16dp" />
+
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCerrarSesion"

@@ -29,7 +29,6 @@ class SubirArchivoActivity : AppCompatActivity() {
     private val listaArchivos = mutableListOf<Archivo>()
     private lateinit var adapter: ArchivosAdapter
 
-    // Lanzador para elegir cualquier tipo de archivo (imágenes o documentos)
     private val pickFile = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             subirArchivo(uri)
@@ -46,7 +45,6 @@ class SubirArchivoActivity : AppCompatActivity() {
         storageRef = FirebaseStorage.getInstance().reference
 
         btnSeleccionarArchivo.setOnClickListener {
-            // Acepta cualquier tipo de archivo o imagen
             pickFile.launch("*/*")
         }
 
