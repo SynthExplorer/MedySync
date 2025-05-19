@@ -3,82 +3,86 @@ package com.example.medysync
 import UserPreferences
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.medysync.databinding.ActivitySeetingsBinding
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class SeetingsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySeetingsBinding
     private lateinit var userPreferences: UserPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_seetings)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, FabFragment())
-            .commit()
+        binding = ActivitySeetingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         userPreferences = UserPreferences(this)
 
-        val btnHistorial = findViewById<MaterialButton>(R.id.btnHistorial)
+        setupButtons()
+    }
 
-        btnHistorial.setOnClickListener {
-            val intent = Intent(this, HistorialTomasActivity::class.java)
-            startActivity(intent)
+    private fun setupButtons() {
+        binding.btnHistorial.setOnClickListener {
+            animateButton(it)
+            startActivity(Intent(this, HistorialTomasActivity::class.java))
         }
 
-        val btnSubirArchivo = findViewById<MaterialButton>(R.id.btnSubirArchivo)
-        btnSubirArchivo.setOnClickListener {
-            val intent = Intent(this, SubirArchivoActivity::class.java)
-            startActivity(intent)
+        binding.btnSubirArchivo.setOnClickListener {
+            animateButton(it)
+            startActivity(Intent(this, SubirArchivoActivity::class.java))
         }
 
-        val btnCrearCita = findViewById<MaterialButton>(R.id.btnCrearCita)
-        btnCrearCita.setOnClickListener {
-            val intent = Intent(this, CrearCitaActivity::class.java)
-            startActivity(intent)
+        binding.btnCrearCita.setOnClickListener {
+            animateButton(it)
+            startActivity(Intent(this, CrearCitaActivity::class.java))
         }
 
-        val btnHistorialCitas = findViewById<MaterialButton>(R.id.btnHistorialCitas)
-        btnHistorialCitas.setOnClickListener {
+        binding.btnHistorialCitas.setOnClickListener {
+            animateButton(it)
             startActivity(Intent(this, HistorialCitasActivity::class.java))
         }
 
-        val btnActualizarPerfil = findViewById<Button>(R.id.btnActualizarPerfil)
-        btnActualizarPerfil.setOnClickListener {
-            val intent = Intent(this, ActualizarPerfilActivity::class.java)
-            startActivity(intent)
+        binding.btnInformeActivity.setOnClickListener {
+            animateButton(it)
+            startActivity(Intent(this, InformeActivity::class.java))
         }
 
-        val btnInforme = findViewById<Button>(R.id.btnInformeActivity)
-        btnInforme.setOnClickListener {
-            val intent = Intent(this, InformeActivity::class.java)
-            startActivity(intent)
+        binding.btnActualizarPerfil.setOnClickListener {
+            animateButton(it)
+            startActivity(Intent(this, ActualizarPerfilActivity::class.java))
         }
 
-
-        val btnCerrarSesion = findViewById<MaterialButton>(R.id.btnCerrarSesion)
-
-        btnCerrarSesion.setOnClickListener {
+        binding.btnCerrarSesion.setOnClickListener {
+            animateButton(it)
             cerrarSesion()
         }
+    }
 
+    private fun animateButton(view: View) {
+        view.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).withEndAction {
+            view.animate().scaleX(1f).scaleY(1f).duration = 100
+        }.start()
     }
 
     private fun cerrarSesion() {
         FirebaseAuth.getInstance().signOut()
 
         lifecycleScope.launch {
-
             userPreferences.clearUserData()
 
+            Toast.makeText(this@SeetingsActivity, "Sesión cerrada", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this@SeetingsActivity, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
