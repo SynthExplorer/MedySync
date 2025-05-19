@@ -28,5 +28,8 @@
     <color name="primaryVariant">#3700B3</color>
     <color name="secondary">#03DAC5</color>
 
+    <color name="teal_200">#64B5F6</color>  <!-- Azul claro -->
+    <color name="teal_700">#1976D2</color>  <!-- Azul más oscuro -->
+
 
 </resources>

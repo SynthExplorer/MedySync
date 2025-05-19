@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Tarjeta del saludo -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardSaludo"
         android:layout_width="0dp"
@@ -17,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
-        android:padding="16dp"
+        android:padding="24dp"
         android:backgroundTint="@android:color/white">
 
         <LinearLayout
@@ -26,13 +25,24 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_marginTop="10dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_avatar"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_background"
+                android:contentDescription="Avatar"
+                android:layout_marginBottom="16dp"/>
+
             <TextView
                 android:id="@+id/tvNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre: ..."
-                android:textColor="#333333"
-                android:textSize="18sp"
+                android:text="Hola, Nombre"
+                android:textColor="#222222"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"/>
 
@@ -41,21 +51,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apellido: ..."
-                android:textColor="#333333"
+                android:textColor="#555555"
                 android:textSize="18sp"
-                android:paddingBottom="8dp"/>
+                android:paddingBottom="4dp"/>
 
             <TextView
                 android:id="@+id/tvCedula"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cédula: ..."
-                android:textColor="#333333"
-                android:textSize="18sp"/>
+                android:textColor="#555555"
+                android:textSize="18sp"
+                android:paddingBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvDescripcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aquí puedes ver y editar tus datos personales."
+                android:textSize="14sp"
+                android:textColor="#777777"
+                android:gravity="center"
+                android:paddingBottom="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditarPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar perfil"
+                app:cornerRadius="24dp"
+                android:backgroundTint="#1E88E5"
+                android:textColor="#FFFFFF" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Contenedor del fragmento -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
@@ -67,6 +97,3 @@
         android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-

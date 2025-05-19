@@ -9,8 +9,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,6 +30,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import com.example.medysync.R
+
 
 class CrearCitaActivity : AppCompatActivity() {
 
@@ -46,6 +51,7 @@ class CrearCitaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_cita)
 
+        // Inicializar vistas
         etTitulo = findViewById(R.id.etTitulo)
         etDescripcion = findViewById(R.id.etDescripcion)
         etFecha = findViewById(R.id.etFecha)
@@ -58,26 +64,45 @@ class CrearCitaActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, opcionesFrecuencia)
         etFrecuencia.setAdapter(adapter)
 
-
         etFrecuencia.setOnClickListener {
             etFrecuencia.showDropDown()
         }
 
         etFecha.setOnClickListener { seleccionarFecha() }
         etFecha.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                seleccionarFecha()
-            }
+            if (hasFocus) seleccionarFecha()
         }
 
         etHora.setOnClickListener { seleccionarHora() }
         etHora.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                seleccionarHora()
-            }
+            if (hasFocus) seleccionarHora()
         }
 
         btnGuardar.setOnClickListener { guardarCita() }
+
+        aplicarAnimaciones()
+    }
+
+    private fun aplicarAnimaciones() {
+        val views = listOf(
+            findViewById<View>(R.id.tilTitulo),
+            findViewById<View>(R.id.tilDescripcion),
+            findViewById<View>(R.id.tilFecha),
+            findViewById<View>(R.id.tilHora),
+            findViewById<View>(R.id.tilFrecuencia),
+            findViewById<View>(R.id.btnGuardar)
+        )
+
+        for ((index, view) in views.withIndex()) {
+            view.visibility = View.INVISIBLE
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                view.visibility = View.VISIBLE
+
+                val anim = AnimationUtils.loadAnimation(this, R.anim.fade_in_up)
+                view.startAnimation(anim)
+            }, index * 300L)
+        }
     }
 
     private fun seleccionarFecha() {

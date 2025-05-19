@@ -2,6 +2,7 @@ package com.example.medysync
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medysync.databinding.ActivityActualizarPerfilBinding
@@ -28,6 +29,11 @@ class ActualizarPerfilActivity : AppCompatActivity() {
         binding.btnGuardarCambios.setOnClickListener {
             actualizarDatosUsuario()
         }
+
+        val rootLayout = binding.root // el ConstraintLayout raíz
+        val animation = AnimationUtils.loadAnimation(this, R.anim.slide_fade_in)
+        rootLayout.startAnimation(animation)
+
     }
 
     private fun actualizarDatosUsuario() {

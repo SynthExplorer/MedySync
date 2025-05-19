@@ -8,30 +8,46 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Informe Médico"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tvInforme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:text="Generando informe..." />
+            android:textColor="#DDDDDD"
+            android:textSize="15sp"
+            android:lineSpacingExtra="6dp"
+            android:text="Generando informe..."
+            android:padding="16dp"
+            android:layout_marginBottom="24dp" />
 
         <Button
             android:id="@+id/btnGenerarPdf"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar PDF"
-            android:layout_marginTop="16dp" />
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnCompartirPdf"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Compartir PDF"
-            android:layout_marginTop="8dp" />
-
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
 </ScrollView>

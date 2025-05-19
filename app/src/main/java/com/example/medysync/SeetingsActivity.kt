@@ -4,6 +4,7 @@ import UserPreferences
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -27,6 +28,26 @@ class SeetingsActivity : AppCompatActivity() {
 
         binding = ActivitySeetingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val buttons = listOf(
+            findViewById<MaterialButton>(R.id.btnHistorial),
+            findViewById<MaterialButton>(R.id.btnHistorialCitas),
+            findViewById<MaterialButton>(R.id.btnSubirArchivo),
+            findViewById<MaterialButton>(R.id.btnCrearCita),
+            findViewById<MaterialButton>(R.id.btnInformeActivity),
+            findViewById<MaterialButton>(R.id.btnActualizarPerfil),
+            findViewById<MaterialButton>(R.id.btnCerrarSesion)
+        )
+
+        buttons.forEachIndexed { index, button ->
+            button.visibility = View.INVISIBLE
+            button.postDelayed({
+                button.visibility = View.VISIBLE
+                val animation = AnimationUtils.loadAnimation(this, R.anim.fade_slide_up)
+                button.startAnimation(animation)
+            }, index * 250L)
+        }
+
 
         userPreferences = UserPreferences(this)
 

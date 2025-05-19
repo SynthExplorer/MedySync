@@ -1,146 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/crearCitaLayout"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121212"
-    android:padding="24dp"
-    tools:context=".CrearCitaActivity">
+    android:padding="24dp">
 
-    <!-- Título -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilTitulo"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Título de la cita"
-        app:boxStrokeColor="#BB86FC"
-        app:boxBackgroundMode="outline"
-        app:hintTextColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etTitulo"
-            android:layout_width="match_parent"
+        <!-- Título -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTitulo"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="Título de la cita"
+            android:visibility="invisible"
+            app:boxStrokeColor="#BB86FC"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Descripción -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDescripcion"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Descripción"
+            android:visibility="invisible"
+            app:boxStrokeColor="#BB86FC"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tilTitulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
-    <!-- Descripción -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilDescripcion"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Descripción"
-        app:boxStrokeColor="#BB86FC"
-        app:boxBackgroundMode="outline"
-        app:hintTextColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tilTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:minLines="3"
+                android:gravity="top|start"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDescripcion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <!-- Fecha -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFecha"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="Fecha"
+            android:visibility="invisible"
+            app:boxStrokeColor="#BB86FC"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tilDescripcion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
-    <!-- Fecha -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilFecha"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Fecha"
-        app:boxStrokeColor="#BB86FC"
-        app:boxBackgroundMode="outline"
-        app:hintTextColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tilDescripcion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFecha"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:clickable="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="true"
-            android:textColor="@android:color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <!-- Hora -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilHora"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="Hora"
+            android:visibility="invisible"
+            app:boxStrokeColor="#BB86FC"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tilFecha"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
-    <!-- Hora -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilHora"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Hora"
-        app:boxStrokeColor="#BB86FC"
-        app:boxBackgroundMode="outline"
-        app:hintTextColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tilFecha"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etHora"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:clickable="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etHora"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="true"
-            android:textColor="@android:color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <!-- Frecuencia -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFrecuencia"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="Frecuencia"
+            android:visibility="invisible"
+            app:boxStrokeColor="#BB86FC"
+            app:boxBackgroundMode="outline"
+            app:hintTextColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tilHora"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
-    <!-- Frecuencia -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilFrecuencia"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Frecuencia"
-        app:boxStrokeColor="#BB86FC"
-        app:boxBackgroundMode="outline"
-        app:hintTextColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tilHora"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+            <AutoCompleteTextView
+                android:id="@+id/etFrecuencia"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <AutoCompleteTextView
-            android:id="@+id/etFrecuencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:focusable="false"
-            android:clickable="true"
-            android:cursorVisible="false"
-            android:textColor="@android:color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <!-- Botón Guardar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Guardar Cita"
+            android:visibility="invisible"
+            style="@style/Widget.MaterialComponents.Button"
+            android:backgroundTint="#BB86FC"
+            android:textColor="@android:color/white"
+            app:cornerRadius="24dp"
+            app:iconPadding="8dp"
+            android:icon="@drawable/ic_save"
+            app:layout_constraintTop_toBottomOf="@id/tilFrecuencia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            android:elevation="6dp" />
 
-    <!-- Botón Guardar -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGuardar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Guardar Cita"
-        style="@style/Widget.MaterialComponents.Button"
-        android:backgroundTint="#BB86FC"
-        android:textColor="@android:color/white"
-        app:cornerRadius="16dp"
-        app:iconPadding="8dp"
-        android:icon="@drawable/ic_save"
-        app:layout_constraintTop_toBottomOf="@id/tilFrecuencia"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
-<!--Test guardado-->
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

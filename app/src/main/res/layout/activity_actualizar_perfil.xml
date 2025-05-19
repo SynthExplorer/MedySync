@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#000">
+    android:background="#121212">
 
     <ScrollView
         android:layout_width="0dp"
@@ -20,93 +20,136 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="24dp"
             android:gravity="center_horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Actualizar Perfil"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Nombre -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nuevo nombre"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="Nombre"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/teal_200"
+                app:boxBackgroundColor="#1E1E1E"
+                app:errorTextColor="@color/design_default_color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNuevoNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Apellido -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNuevoApellido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:hint="Apellido"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/teal_200"
+                app:boxBackgroundColor="#1E1E1E"
+                app:errorTextColor="@color/design_default_color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNuevoApellido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Correo -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="Nuevo correo"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="16dp"
+                android:hint="Correo electrónico"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/teal_200"
+                app:boxBackgroundColor="#1E1E1E"
+                app:errorTextColor="@color/design_default_color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNuevoCorreo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Contraseña actual -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:hint="Contraseña actual"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/teal_200"
+                app:boxBackgroundColor="#1E1E1E"
+                app:errorTextColor="@color/design_default_color_error"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etContrasenaActual"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Nueva contraseña -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:hint="Nueva contraseña"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/teal_200"
+                app:boxBackgroundColor="#1E1E1E"
+                app:errorTextColor="@color/design_default_color_error"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNuevaContrasena"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Botón Guardar -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGuardarCambios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Guardar cambios"
-                android:layout_marginTop="20dp"
-                app:backgroundTint="#1E88E5"
-                android:textColor="#FFF"
-                app:cornerRadius="24dp"/>
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginTop="32dp"
+                app:cornerRadius="30dp"
+                app:backgroundTint="@color/teal_700"
+                app:icon="@drawable/ic_save"
+                app:iconTint="#FFFFFF"
+                app:iconPadding="8dp"
+                android:paddingVertical="12dp"/>
 
         </LinearLayout>
     </ScrollView>

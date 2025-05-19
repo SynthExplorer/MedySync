@@ -1,22 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="#000">
 
     <GridLayout
-        android:id="@+id/gridMenu"
+        android:id="@+id/buttonGrid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
         android:columnCount="2"
         android:rowCount="4"
+        android:alignmentMode="alignMargins"
         android:columnOrderPreserved="false"
-        android:padding="8dp"
-        android:layout_marginTop="16dp"
+        android:useDefaultMargins="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -27,44 +27,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="📋 Historial Tomas"
-            android:textSize="14sp"
+            android:text="Ver Historial de Tomas"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#1E88E5"
-            android:layout_margin="8dp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubirArchivo"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="📁 Subir Archivo"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#03A9F4"
-            android:layout_margin="8dp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCrearCita"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="📅 Crear Cita"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#4CAF50"
-            android:layout_margin="8dp"/>
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#1E88E5" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnHistorialCitas"
@@ -72,59 +40,84 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="📖 Historial Citas"
-            android:textSize="14sp"
+            android:text="Ver Historial de Citas"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#607D8B"
-            android:layout_margin="8dp"/>
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#607D8B" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubirArchivo"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:text="Subir Archivo"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#03A9F4" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCrearCita"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:text="Crear Cita"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#4CAF50" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnInformeActivity"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="📊 Exportar Informe"
-            android:textSize="14sp"
+            android:layout_columnSpan="2"
+            android:text="Exportar Informe"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#27B0A9"
-            android:layout_margin="8dp"/>
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#27B0A9" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnActualizarPerfil"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="👤 Actualizar Perfil"
-            android:textSize="14sp"
+            android:layout_columnSpan="2"
+            android:text="Actualizar Perfil"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#9C27B0"
-            android:layout_margin="8dp"/>
+            android:padding="12dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#9C27B0" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCerrarSesion"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:text="🚪 Cerrar Sesión"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"
-            android:padding="16dp"
-            app:cornerRadius="20dp"
-            app:backgroundTint="#D32F2F"
-            android:layout_margin="8dp"/>
     </GridLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCerrarSesion"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar Sesión"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        app:cornerRadius="24dp"
+        app:backgroundTint="#D32F2F"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonGrid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

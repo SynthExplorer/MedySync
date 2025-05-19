@@ -6,12 +6,15 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.content.Intent
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 import android.widget.Toast
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +23,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var tvNombre: TextView
+    private lateinit var tvApellido: TextView
+    private lateinit var tvCedula: TextView
+    private lateinit var btnEditarPerfil: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +40,28 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
+        // Vincular vistas
+        tvNombre = findViewById(R.id.tvNombre)
+        tvApellido = findViewById(R.id.tvApellido)
+        tvCedula = findViewById(R.id.tvCedula)
+        btnEditarPerfil = findViewById(R.id.btnEditarPerfil)
+
+        btnEditarPerfil.setOnClickListener {
+            val intent = Intent(this, ActualizarPerfilActivity::class.java)
+            startActivity(intent)
+        }
+        val ivAvatar = findViewById<ImageView>(R.id.ivAvatar)
+        val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
+        ivAvatar.startAnimation(bounceAnim)
+
     }
 
     override fun onResume() {
         super.onResume()
         actualizarDatosUsuario()
     }
+
     private fun actualizarDatosUsuario() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -48,13 +72,11 @@ class MainActivity : AppCompatActivity() {
                         val nombre = document.getString("nombre") ?: "Usuario"
                         val apellido = document.getString("apellido") ?: ""
                         val cedula = document.getString("id") ?: ""
-                        val tvNombre = findViewById<TextView>(R.id.tvNombre)
-                        val tvApellido = findViewById<TextView>(R.id.tvApellido)
-                        val tvCedula = findViewById<TextView>(R.id.tvCedula)
 
-                        tvNombre.text = nombre
+                        tvNombre.text = "Hola, $nombre"
                         tvApellido.text = apellido
                         tvCedula.text = cedula
+
                     } else {
                         Toast.makeText(this, "Error al obtener los datos del usuario", Toast.LENGTH_SHORT).show()
                     }
@@ -66,5 +88,4 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
