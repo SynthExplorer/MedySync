@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#000000">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardSaludo"
@@ -17,13 +18,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
         android:padding="24dp"
-        android:backgroundTint="@android:color/white">
+        android:foreground="@drawable/card_ripple"
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:background="@drawable/card_background"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/ivAvatar"
@@ -41,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hola, Nombre"
-                android:textColor="#222222"
+                android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"/>
@@ -51,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apellido: ..."
-                android:textColor="#555555"
+                android:textColor="#CCCCCC"
                 android:textSize="18sp"
                 android:paddingBottom="4dp"/>
 
@@ -60,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cédula: ..."
-                android:textColor="#555555"
+                android:textColor="#CCCCCC"
                 android:textSize="18sp"
                 android:paddingBottom="16dp"/>
 
@@ -70,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="Aquí puedes ver y editar tus datos personales."
                 android:textSize="14sp"
-                android:textColor="#777777"
+                android:textColor="#AAAAAA"
                 android:gravity="center"
                 android:paddingBottom="16dp"/>
 
@@ -80,9 +85,8 @@
                 android:layout_height="wrap_content"
                 android:text="Editar perfil"
                 app:cornerRadius="24dp"
-                android:backgroundTint="#1E88E5"
-                android:textColor="#FFFFFF" />
-
+                android:backgroundTint="#00B4FF"
+            android:textColor="#FFFFFF" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -95,5 +99,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

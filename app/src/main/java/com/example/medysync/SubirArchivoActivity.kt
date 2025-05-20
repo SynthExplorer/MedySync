@@ -66,7 +66,6 @@ class SubirArchivoActivity : AppCompatActivity() {
         val fileName = System.currentTimeMillis().toString() + "_" + nombreOriginal
         val fileRef = storageRef.child("archivosUsuarios/$userId/$fileName")
 
-        // Sube archivo (imagen o documento)
         fileRef.putFile(uri)
             .addOnSuccessListener {
                 fileRef.downloadUrl.addOnSuccessListener { downloadUrl ->

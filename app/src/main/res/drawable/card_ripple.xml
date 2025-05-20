@@ -1,0 +1,8 @@
+<!-- res/drawable/card_ripple.xml -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#66B4FFFF"> <!-- Azul brillante con buena opacidad (40%) -->
+
+    <!-- Esto asegura que el contenido no se oculte -->
+    <item android:id="@android:id/mask"
+        android:drawable="@android:color/white" />
+</ripple>

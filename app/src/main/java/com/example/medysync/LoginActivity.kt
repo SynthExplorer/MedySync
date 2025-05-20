@@ -31,9 +31,9 @@ class LoginActivity : AppCompatActivity() {
         val blob_1 = findViewById<ImageView>(R.id.blob_1)
         val blob_2 = findViewById<ImageView>(R.id.blob_2)
 
-        blob_1.translationX = -900f  // empieza más a la izquierda
-        blob_1.translationY = -900f  // empieza más arriba
-        blob_1.alpha = 0f            // comienza invisible
+        blob_1.translationX = -900f
+        blob_1.translationY = -900f
+        blob_1.alpha = 0f
 
         blob_1.animate()
             .translationX(-500f)
@@ -43,9 +43,9 @@ class LoginActivity : AppCompatActivity() {
             .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
             .start()
 
-        blob_2.translationX = 900f  // empieza más a la izquierda
-        blob_2.translationY = 900f  // empieza más arriba
-        blob_2.alpha = 0f            // comienza invisible
+        blob_2.translationX = 900f
+        blob_2.translationY = 900f
+        blob_2.alpha = 0f
 
         blob_2.animate()
             .translationX(0f)

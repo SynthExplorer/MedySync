@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
@@ -7,13 +8,20 @@
     android:padding="24dp"
     android:background="#121212">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSeleccionarArchivo"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seleccionar archivo"
-        android:backgroundTint="#63CC71"
-        android:textColor="@android:color/white" />
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        app:cornerRadius="24dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="#2BF4C7"
+        app:backgroundTint="#0A0F2C" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerArchivos"
